@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EMS Narrative Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      color: #333;
+      background: #f6f8fa;
+    }
+    h1, h2 {
+      color: #0366d6;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    input[type="text"], select, textarea {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      margin-bottom: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .checkbox-group, .radio-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .btn {
+      background-color: #0366d6;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .btn:hover {
+      background-color: #0253aa;
+    }
+    #protocol-summary, #treatment-notes {
+      background: #e9f5ff;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 4px;
+      white-space: pre-wrap;
+    }
+    #narrativeOutput {
+      white-space: pre-wrap;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 4px;
+      background: #fff;
+      margin-top: 10px;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>EMS Narrative Generator</h1>
+
+  <div class="container">
+    <h2>1. Dispatch Information</h2>
+    <div class="form-group">
+      <label for="unitNumber">Unit Number</label>
+      <select id="unitNumber">
+        <option value="">-- Select Unit --</option>
+        <option value="Rescue 22">Rescue 22</option>
+        <option value="Rescue 45">Rescue 45</option>
+        <option value="Engine 1">Engine 1</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="dispatchNature">Dispatch Nature</label>
+      <input type="text" id="dispatchNature" placeholder="e.g., Severe chest pain at local mall" />
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>2. Response Information</h2>
+    <div class="checkbox-group">
+      <label><input type="checkbox" id="code3" checked /> Responded Code 3 (Lights &amp; Sirens)</label>
+    </div>
+    <div class="form-group">
+      <label for="responseDelays">Response Delays</label>
+      <select id="responseDelays">
+        <option value="">-- Select Delay --</option>
+        <option value="No Delay">No Delay</option>
+        <option value="Traffic Delay">Traffic Delay</option>
+        <option value="Weather Delay">Weather Delay</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>3. Arrival Information</h2>
+    <div class="form-group">
+      <label for="patientPresentation">Patient Presentation</label>
+      <input type="text" id="patientPresentation" placeholder="e.g., Found patient sitting on a bench, appearing pale..." />
+    </div>
+    <div class="form-group">
+      <label for="distressLevel">General Impression / Distress Level</label>
+      <input type="text" id="distressLevel" placeholder="e.g., severe distress" />
+    </div>
+    <div class="form-group">
+      <label for="chiefComplaint">Chief Complaint</label>
+      <input type="text" id="chiefComplaint" placeholder="e.g., crushing chest pain" />
+      <div id="protocol-summary" class="hidden"></div>
+    </div>
+    <div class="form-group">
+      <label for="additionalUnits">Additional Units on Scene</label>
+      <input type="text" id="additionalUnits" placeholder="e.g., Police, Fire, etc." />
+    </div>
+    <div class="form-group">
+      <label>Any Other Relevant Info</label>
+      <textarea id="arrivalAdditionalInfo" rows="3" placeholder="Notes or relevant info..."></textarea>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>4. Assessment Information</h2>
+    <div class="form-group">
+      <label for="locAssessment">LOC Assessment</label>
+      <input type="text" id="locAssessment" placeholder="e.g., alert, oriented x3, etc." />
+    </div>
+    <div class="form-group">
+      <label>Head/Neuro:</label>
+      <div class="form-group">
+        <label for="gcsScore">GCS Score</label>
+        <input type="text" id="gcsScore" placeholder="15, 14, etc." />
+      </div>
+      <div class="form-group">
+        <label for="orientationScore">Orientation Score (A&amp;O x ?)</label>
+        <input type="text" id="orientationScore" placeholder="A&O x3" />
+      </div>
+      <div class="form-group">
+        <label for="pupils">Pupils</label>
+        <input type="text" id="pupils" placeholder="PERRL, etc." />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="presentIllnessInjury">Present Illness / Injury Info</label>
+      <textarea id="presentIllnessInjury" rows="2"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="medicalHistory">Relevant Medical History</label>
+      <textarea id="medicalHistory" rows="2"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="vitalSigns">Vital Signs</label>
+      <textarea id="vitalSigns" rows="2"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="pertinentNegatives">Pertinent Negatives</label>
+      <textarea id="pertinentNegatives" rows="2"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="dcapBtls">Detailed BLS Assessment (DCAP-BTLS)</label>
+      <input type="text" id="dcapBtls" placeholder="No DCAP-BTLS noted, etc." />
+    </div>
+    <div class="form-group">
+      <label>Any Other Relevant Info</label>
+      <textarea id="assessmentAdditionalInfo" rows="3"></textarea>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>5. Treatment Provided</h2>
+    <div class="form-group">
+      <label for="treatmentProvided">List All Treatments/Medications</label>
+      <textarea id="treatmentProvided" rows="3" placeholder="Aspirin 324mg PO, O2 via NC at 2 LPM, etc."></textarea>
+      <div id="treatment-notes" class="hidden"></div>
+    </div>
+    <div class="form-group">
+      <label for="treatmentConditionStatus">Condition Status After Treatment</label>
+      <textarea id="treatmentConditionStatus" rows="2" placeholder="e.g., patient states partial relief, stable, improved, etc."></textarea>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>6. Transport / Transfer</h2>
+    <div class="form-group">
+      <label for="movementToStretcher">How was the patient moved to the stretcher?</label>
+      <input type="text" id="movementToStretcher" placeholder="e.g., assisted to standing, then seated on stretcher" />
+    </div>
+    <div class="form-group">
+      <label for="stretcherPosition">Position on the Stretcher</label>
+      <select id="stretcherPosition">
+        <option value="">-- Select Position --</option>
+        <option value="Supine">Supine</option>
+        <option value="Semi-Fowlers">Semi-Fowler's</option>
+        <option value="High-Fowlers">High-Fowler's</option>
+      </select>
+    </div>
+    <div class="checkbox-group">
+      <label><input type="checkbox" id="transportIncidentFree" checked /> Transported without incident or delay</label>
+    </div>
+    <div class="form-group">
+      <label for="transportMode">Transport Mode (ALS/BLS)</label>
+      <select id="transportMode">
+        <option value="ALS">ALS</option>
+        <option value="BLS">BLS</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="hospitalSelection">Hospital Selection</label>
+      <input type="text" id="hospitalSelection" placeholder="e.g., Mount Sinai ER" />
+    </div>
+    <div class="form-group">
+      <label for="rnName">RN Name receiving patient</label>
+      <input type="text" id="rnName" placeholder="e.g., RN Michelle" />
+    </div>
+  </div>
+
+  <div class="container">
+    <button class="btn" id="generateNarrativeBtn">Generate Narrative</button>
+  </div>
+
+  <div class="container">
+    <h2>Generated Narrative</h2>
+    <div id="narrativeOutput"></div>
+  </div>
+
+  <!-- Include tf.js and the USE model for client-side embeddings or generation -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.20.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder@1.3.3/dist/universal-sentence-encoder.min.js"></script>
+
+  <!-- Main script to handle logic -->
+  <script>
+    //===================== INDEXEDDB (STORING SAMPLE NARRATIVES) =====================//
+    let db;
+
+    function initDB() {
+      const request = indexedDB.open('EMSNarrativesDB', 1);
+
+      request.onupgradeneeded = function(e) {
+        db = e.target.result;
+        if(!db.objectStoreNames.contains('narratives')) {
+          db.createObjectStore('narratives', { keyPath: 'id', autoIncrement: true });
+        }
+      };
+
+      request.onsuccess = function(e) {
+        db = e.target.result;
+        console.log('IndexedDB initialized successfully.');
+      };
+
+      request.onerror = function(e) {
+        console.error('Error initializing IndexedDB:', e.target.error);
+      };
+    }
+
+    // Store a sample narrative for demonstration
+    function storeSampleNarrative(sample) {
+      const transaction = db.transaction(['narratives'], 'readwrite');
+      const store = transaction.objectStore('narratives');
+      store.add({ narrative: sample });
+    }
+
+    //===================== PROTOCOL API FETCH (PANTRY) =====================//
+    const PANTRY_ID = '689ac997-c785-41d8-b7ab-22f9bd66c2b6';
+
+    async function fetchProtocols() {
+      try {
+        const url = `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/CommonEMSProtocols`;
+        const response = await fetch(url);
+        if(!response.ok) {
+          throw new Error('Failed to fetch protocols from Pantry');
+        }
+        const data = await response.json();
+        return data;
+      } catch(err) {
+        console.error(err);
+        return null;
+      }
+    }
+
+    // Filter protocol that matches chief complaint
+    function findProtocolByComplaint(complaint, protocols) {
+      if (!protocols || !complaint) return null;
+
+      const complaintLower = complaint.toLowerCase();
+      let matched = null;
+      if (Array.isArray(protocols)) {
+        matched = protocols.find(proto => {
+          return proto.title && proto.title.toLowerCase().includes(complaintLower);
+        });
+      } else {
+        for (let key in protocols) {
+          if (key.toLowerCase().includes(complaintLower)) {
+            matched = { title: key, content: protocols[key] };
+            break;
+          }
+        }
+      }
+      return matched;
+    }
+
+    //===================== UI LOGIC & NARRATIVE GENERATION =====================//
+    let loadedProtocols = null;
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      initDB();
+      loadedProtocols = await fetchProtocols();
+
+      const chiefComplaintInput = document.getElementById('chiefComplaint');
+      chiefComplaintInput.addEventListener('blur', () => {
+        const complaintValue = chiefComplaintInput.value.trim();
+        if (complaintValue && loadedProtocols) {
+          const matched = findProtocolByComplaint(complaintValue, loadedProtocols);
+          const protocolSummaryElem = document.getElementById('protocol-summary');
+          if (matched) {
+            protocolSummaryElem.textContent = `Protocol Found: ${matched.title}\n\n${matched.content}`;
+            protocolSummaryElem.classList.remove('hidden');
+          } else {
+            protocolSummaryElem.textContent = 'No matching protocol found.';
+            protocolSummaryElem.classList.remove('hidden');
+          }
+        }
+      });
+
+      const treatmentProvidedInput = document.getElementById('treatmentProvided');
+      treatmentProvidedInput.addEventListener('blur', () => {
+        const treatmentVal = treatmentProvidedInput.value.toLowerCase();
+        const notesElem = document.getElementById('treatment-notes');
+
+        if (treatmentVal.includes('aspirin') && loadedProtocols) {
+          notesElem.textContent = 'Note: Aspirin 324 mg PO recommended if no contraindications.';
+          notesElem.classList.remove('hidden');
+        } else {
+          notesElem.textContent = '';
+          notesElem.classList.add('hidden');
+        }
+      });
+
+      const generateBtn = document.getElementById('generateNarrativeBtn');
+      generateBtn.addEventListener('click', generateNarrative);
+    });
+
+    function generateNarrative() {
+      const unitNumber = document.getElementById('unitNumber').value;
+      const dispatchNature = document.getElementById('dispatchNature').value;
+      const code3Checked = document.getElementById('code3').checked;
+      const responseDelays = document.getElementById('responseDelays').value;
+
+      const patientPresentation = document.getElementById('patientPresentation').value;
+      const distressLevel = document.getElementById('distressLevel').value;
+      const chiefComplaint = document.getElementById('chiefComplaint').value;
+      const additionalUnits = document.getElementById('additionalUnits').value;
+      const arrivalAdditionalInfo = document.getElementById('arrivalAdditionalInfo').value;
+
+      const locAssessment = document.getElementById('locAssessment').value;
+      const gcsScore = document.getElementById('gcsScore').value;
+      const orientationScore = document.getElementById('orientationScore').value;
+      const pupils = document.getElementById('pupils').value;
+      const presentIllnessInjury = document.getElementById('presentIllnessInjury').value;
+      const medicalHistory = document.getElementById('medicalHistory').value;
+      const vitalSigns = document.getElementById('vitalSigns').value;
+      const pertinentNegatives = document.getElementById('pertinentNegatives').value;
+      const dcapBtls = document.getElementById('dcapBtls').value;
+      const assessmentAdditionalInfo = document.getElementById('assessmentAdditionalInfo').value;
+
+      const treatmentProvided = document.getElementById('treatmentProvided').value;
+      const treatmentConditionStatus = document.getElementById('treatmentConditionStatus').value;
+
+      const movementToStretcher = document.getElementById('movementToStretcher').value;
+      const stretcherPosition = document.getElementById('stretcherPosition').value;
+      const transportIncidentFree = document.getElementById('transportIncidentFree').checked;
+      const transportMode = document.getElementById('transportMode').value;
+      const hospitalSelection = document.getElementById('hospitalSelection').value;
+      const rnName = document.getElementById('rnName').value;
+
+      let narrative = '';
+
+      narrative += `${unitNumber} was dispatched to a ${dispatchNature}.\n\n`;
+
+      narrative += `${unitNumber} responded `;
+      if (code3Checked) {
+        narrative += 'code 3 (emergency), with lights and sirens. ';
+      } else {
+        narrative += 'in a non-emergency capacity. ';
+      }
+      narrative += responseDelays ? `${responseDelays}.\n\n` : 'No response delays.\n\n';
+
+      narrative += `Upon arrival, we found the patient ${patientPresentation}. `;
+      narrative += `The general impression of the patient was ${distressLevel}. `;
+      narrative += `The chief complaint for the patient was ${chiefComplaint}. `;
+      if (additionalUnits) {
+        narrative += `${additionalUnits} also arrived on scene. `;
+      }
+      if (arrivalAdditionalInfo) {
+        narrative += `${arrivalAdditionalInfo}\n\n`;
+      } else {
+        narrative += '\n\n';
+      }
+
+      narrative += `A complete head to toe ALS initial assessment on the patient was performed. `;
+      narrative += `Patient was ${locAssessment}. HEAD/NEURO: GCS ${gcsScore}, A&O ${orientationScore}, Pupils: ${pupils}. `;
+      narrative += `${presentIllnessInjury} ${medicalHistory} `;
+      narrative += `Vital signs were ${vitalSigns}. ${pertinentNegatives}. `;
+      narrative += `A detailed BLS assessment was performed and the patient ${dcapBtls}. `;
+      narrative += assessmentAdditionalInfo ? `${assessmentAdditionalInfo}\n\n` : '\n\n';
+
+      narrative += `[RX / TREATMENT]: ${treatmentProvided}. `;
+      narrative += `The patient's condition ${treatmentConditionStatus} Authorized by protocol (standing order). `;
+      narrative += 'An ongoing assessment was performed every 5 minutes. ';
+      narrative += `Patient states ${treatmentConditionStatus}.\n\n`;
+
+      narrative += `Patient was ${movementToStretcher}. `;
+      narrative += `Patient was secured to stretcher and positioned in ${stretcherPosition} position. `;
+      if (transportIncidentFree) {
+        narrative += 'Patient was transported without incident or delay. ';
+      }
+      narrative += `Patient was transported via ${transportMode} to ${hospitalSelection}. `;
+      narrative += `Patient moved from stretcher to emergency department cot via two person sheet lift. `;
+      narrative += `All belongings were turned over to hospital staff and/or patient. `;
+      narrative += `The person taking over care was ${rnName}, who received a full verbal report, including the patient's chief complaint, history, and relevant details. `;
+      narrative += `Patient signed consent on computer form. Nurse signed for patient transfer of care.\n`;
+
+      document.getElementById('narrativeOutput').textContent = narrative;
+    }
+  </script>
+</body>
+</html>
