@@ -1,0 +1,5 @@
+{
+  "pantryApiKey": "YOUR_PANTRY_API_KEY",
+  "defaultTheme": "light",
+  "indexedDbName": "ems_data"
+}

@@ -1,0 +1,59 @@
+Implement a single-page EMS narrative generator web application with the following features:
+
+**Core Features:**
+
+* Modern, sleek UI for entering EMS narrative data (dropdowns, text boxes, checkboxes). Use a UI framework (React, Vue, or Angular) for better component management.
+* IndexedDB for storing sample narratives.  Initialize IndexedDB on page load and implement functions to store and retrieve narratives.
+* tf.js and Universal Sentence Encoder (USE) for text embeddings and narrative generation. Include the necessary scripts from a CDN in the HTML.
+* Pantry API integration (ID: `689ac997-c785-41d8-b7ab-22f9bd66c2b6`, basket: `CommonEMSProtocols`) to fetch protocols.  Implement functions to fetch protocols from the Pantry API and handle potential errors.
+* Automatic display of relevant protocol summaries based on chief complaints.  Implement event listeners to detect changes in the chief complaint input and update the protocol summary accordingly.
+
+**Error Handling and Source Map:**
+
+* Implement robust error handling for API requests and other potential issues. Provide user-friendly error messages to the user.  Use try-catch blocks to handle errors gracefully.
+* Address the source map error to improve debugging.  Ensure that source maps are correctly generated and linked in the build process.
+
+**Protocol Search Feature:**
+
+* Implement a "Search for Protocol" button that allows users to search the Pantry API for protocols, medications, and other relevant information based on keywords.  The search results should dynamically update relevant sections (Chief Complaint, Treatment, Transport).
+* Include a mechanism for replacing existing information with new selections. Use a modal or collapsible section for search results.  Implement functionality to handle user selection and update the relevant sections.
+
+**Advanced Narrative Generation:**
+
+* Use tf.js and USE to enhance narrative generation by merging user input with matched protocol text.
+* Embed user input and protocol text using USE.  Implement functions to embed text using USE and handle the resulting embeddings.
+* Compute similarity scores (cosine similarity recommended).  Implement a function to compute cosine similarity between embeddings.
+* Select top-ranked protocol sentences based on similarity.  Implement a function to select the top-ranked sentences based on similarity scores.
+* Merge selected sentences into the generated narrative, ensuring each section is a separate paragraph. Implement a function to merge the selected sentences into the narrative while maintaining the specified structure.
+* Use the following template as a reference for the narrative structure:
+
+[unit number drop down menu] was dispatched to a [dispatch nature test box].
+
+[Unit number copied from previous selection] responded code 3 (emergency), with lights and sirens. [Response delays drop down menu]
+
+Upon arrival to the scene we found the patient [patient presentation]. The general impression of the patient
+was [distress level].  The chief complaint for the patient was [chief complaint]. [additional units on scene].  [ANY OTHER RELEVANT INFO TEXT BOX]
+
+
+A complete head to toe ALS initial assessment on the patient was performed. Patient was [LOC Assessment].
+HEAD/NEURO: [GCS Score], [Alert, Awake, and Oriented Score], [Pupils]. [PRESENT ILLNESS / INJURY INFORMATION]  [Relevant Medical History]  Vital signs were [vital sign assessment]. [Pertinent negatives].  A detailed BLS assessment was performed and the patient [DCAP-BTLS assessment]
+OTHER: [ANY OTHER RELEVANT INFO TEXT BOX]
+
+[RX / TREATMENT (list all treatment provided followed by the next two statements after each treatment or medication provided)] The patient's condition [condition status] Authorized by protocol (standing order).  An ongoing assessment was performed every 5 minutes. Patient states [condition status].
+
+Patient was [how was the patient moved to the stretcher]. Patient was secured to stretcher using stretcher straps and stretcher was secured into the rescue. Patient was positioned on stretcher in [pts position on the stretcher] position.  Patient was transported without incident and without delay. Patient was transported via [ALS / BLS status] to [hospital selection]. Patient moved  from stretcher to emergency department cot via two person sheet lift.  All of patient's belongings were turned over to the hospital staff and/or patient.  The person taking over care was [RN name].  They were given a verbal patient report that included the patient's chief complaint, medical history, medications, allergies, and  all relevant information involving the pts condition.  Patient signed consent on computer form. Nurse signed for patient transfer of care on computer.
+
+
+* Store or embed this template for use by the tf.js/USE model (IndexedDB or directly in the code).  Consider using a JavaScript object to represent the template structure.
+
+**Additional Enhancements:**
+
+* Implement client-side data validation to ensure correct input formats.  Use regular expressions or other validation techniques to check user input.
+* Add progress indicators for long-running operations (API requests).  Use visual cues to indicate loading progress.
+* Ensure accessibility (WCAG guidelines).  Follow accessibility best practices for color contrast, keyboard navigation, and screen reader compatibility.
+* Explore using IndexedDB for offline narrative generation.  Implement functionality to store and retrieve data from IndexedDB when offline.
+* Enhance protocol search with filtering and sorting options.  Implement filtering and sorting capabilities for the search results.
+* Implement a comprehensive testing strategy (unit, integration, end-to-end tests).  Write unit tests for individual functions, integration tests for interacting components, and end-to-end tests for the entire application flow.
+
+
+**Note:** This application will be a static site hosted on GitHub Pages; therefore, no user feedback mechanism is needed. The application should be easily deployable to GitHub Pages.  Ensure the code is well-structured, commented, and follows best practices.
