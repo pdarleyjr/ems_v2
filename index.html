@@ -1,62 +1,187 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Narrative Generator</title>
-<style>
-  body {
-    font-family: sans-serif;
-    line-height: 1.6;
-    color: #333; /* Darker text color */
-  }
-  h1, h2 {
-    color: #0056b3; /* Blue headings */
-  }
-  textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-  }
-  button {
-    background-color: #0056b3;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-  }
-  #results p {
-    margin: 5px 0;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMS Protocol Reference</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Narrative Generator</h1>
-  <textarea id="userInput" rows="4" cols="50"></textarea><br>
-  <button onclick="handleUserInput()">Generate Narrative</button>
-  <div id="narrativeOutput"></div>
+    <div class="container">
+        <!-- Protocol Selection Module -->
+        <section class="protocol-module">
+            <h2>Protocol Selection</h2>
+            <div class="protocol-selector">
+                <select id="protocolSelect" aria-label="Select Protocol">
+                    <option value="">Select Protocol...</option>
+                </select>
+            </div>
+            <div class="protocol-summary" id="protocolSummary"></div>
+        </section>
 
-  <h2>Protocol Search</h2>
-  <input type="text" id="searchInput" placeholder="Enter keywords">
-  <button id="searchButton">Search for Protocol</button>
-  <div id="results"></div>
+        <!-- Main Tabbed Interface -->
+        <main class="tabbed-interface">
+            <nav class="tab-navigation">
+                <button class="tab-button active" data-tab="dispatch">Dispatch Information</button>
+                <button class="tab-button" data-tab="response">Response Information</button>
+                <button class="tab-button" data-tab="arrival">Arrival Information</button>
+                <button class="tab-button" data-tab="assessment">Assessment</button>
+                <button class="tab-button" data-tab="treatment">Treatment</button>
+                <button class="tab-button" data-tab="transport">Transport/Transfer</button>
+            </nav>
 
-  <script type="module">
-    import { handleUserInput } from './ui_logic.js';
-    import { displayResults } from './js/ui.js';
+            <form id="narrativeForm">
+                <!-- Dispatch Information Tab -->
+                <div class="tab-content active" id="dispatch">
+                    <div class="form-group">
+                        <label for="unitNumber">Unit Number:</label>
+                        <select id="unitNumber" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="dispatchNature">Dispatch Nature:</label>
+                        <select id="dispatchNature" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="additionalUnits">Additional Units:</label>
+                        <select id="additionalUnits" multiple></select>
+                    </div>
+                </div>
 
-    async function handleUserInput() {
-      const userInput = document.getElementById('userInput').value;
-      await handleUserInput(userInput);
-    }
+                <!-- Response Information Tab -->
+                <div class="tab-content" id="response">
+                    <div class="form-group">
+                        <label for="responseDelay">Response Delay:</label>
+                        <select id="responseDelay"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="responseConditions">Response Conditions:</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="responseConditions" value="lights"> Lights</label>
+                            <label><input type="checkbox" name="responseConditions" value="sirens"> Sirens</label>
+                        </div>
+                    </div>
+                </div>
 
-    const searchButton = document.getElementById('searchButton');
-    const searchInput = document.getElementById('searchInput');
-    searchButton.addEventListener('click', async () => {
-      const keywords = searchInput.value;
-      const protocols = await fetchProtocols(keywords);
-      displayResults(protocols);
-    });
-  </script>
+                <!-- Arrival Information Tab -->
+                <div class="tab-content" id="arrival">
+                    <div class="form-group">
+                        <label for="patientPresentation">Patient Presentation:</label>
+                        <select id="patientPresentation" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="distressLevel">Distress Level:</label>
+                        <select id="distressLevel" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="chiefComplaint">Chief Complaint:</label>
+                        <select id="chiefComplaint" required></select>
+                    </div>
+                </div>
+
+                <!-- Assessment Tab -->
+                <div class="tab-content" id="assessment">
+                    <div class="assessment-layout">
+                        <div class="assessment-form">
+                            <div class="form-group">
+                                <label>Vitals:</label>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" id="vitalsNormal"> All Vitals Within Normal Limits</label>
+                                </div>
+                                <div id="vitalsDetails" class="nested-form-group">
+                                    <!-- Vitals inputs will be shown when not "normal" -->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Pertinent Negatives:</label>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" id="selectAllNegatives"> Select All</label>
+                                    <div id="pertinentNegatives" class="checkbox-list">
+                                        <!-- Dynamically populated negatives -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="locAssessment">LOC Assessment:</label>
+                                <select id="locAssessment" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="gcsScore">GCS Score:</label>
+                                <select id="gcsScore"></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="alertOriented">Alert & Oriented:</label>
+                                <select id="alertOriented"></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pupils">Pupils:</label>
+                                <select id="pupils"></select>
+                            </div>
+                        </div>
+                        <div id="protocolImage" class="protocol-image-container">
+                            <img src="" alt="" class="protocol-image">
+                            <div id="imageCounter" class="image-counter"></div>
+                            <div class="image-navigation">
+                                <span class="nav-hint">Click image to view next</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Treatment Tab -->
+                <div class="tab-content" id="treatment">
+                    <div class="form-group">
+                        <label for="rxTreatment">Treatment Provided:</label>
+                        <select id="rxTreatment" multiple></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="conditionStatus">Condition Status:</label>
+                        <select id="conditionStatus"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ongoingAssessment">Ongoing Assessment:</label>
+                        <select id="ongoingAssessment"></select>
+                    </div>
+                </div>
+
+                <!-- Transport/Transfer Tab -->
+                <div class="tab-content" id="transport">
+                    <div class="form-group">
+                        <label for="callOutcome">Call Outcome:</label>
+                        <select id="callOutcome" required>
+                            <option value="">Select Outcome...</option>
+                            <option value="transport">Transport</option>
+                            <option value="refusal">Patient Refusal</option>
+                        </select>
+                    </div>
+                    <div id="transportDetails" class="conditional-section">
+                        <div class="form-group">
+                            <label for="transportMethod">Transport Method:</label>
+                            <select id="transportMethod"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="patientPosition">Patient Position:</label>
+                            <select id="patientPosition"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transportVia">Transport Via:</label>
+                            <select id="transportVia"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="hospitalSelection">Hospital:</label>
+                            <select id="hospitalSelection"></select>
+                        </div>
+                    </div>
+                    <div id="refusalDetails" class="conditional-section">
+                        <div class="form-group">
+                            <label for="refusalNotes">Refusal Documentation:</label>
+                            <textarea id="refusalNotes" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script type="module" src="js/ui.js"></script>
 </body>
 </html>

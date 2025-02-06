@@ -1,0 +1,86 @@
+[
+  {
+    "title": "ABDOMINAL PAIN",
+    "type": "medical",
+    "summary": "Protocol for managing abdominal pain. Key assessment: location, severity, associated symptoms. Consider cardiac origin for upper abdominal pain in males >35 and females >45. Obtain 12-lead ECG. For lower abdominal pain in females of childbearing age, consider ectopic pregnancy.",
+    "keywords": ["pain", "abdominal", "epigastric", "cardiac", "ectopic", "pregnancy", "ECG"],
+    "procedureImages": ["01"]
+  },
+  {
+    "title": "AIRWAY MANAGEMENT",
+    "type": "medical",
+    "summary": "Systematic approach to airway assessment and intervention. Evaluate upper and lower airways. Use least invasive method to maintain airway. Progress through basic to advanced interventions as needed. Monitor oxygen saturation and end-tidal CO2.",
+    "keywords": ["airway", "breathing", "oxygen", "intubation", "ventilation", "suction"],
+    "procedureImages": ["05", "06", "07"]
+  },
+  {
+    "title": "ALLERGIC / SYSTEMIC REACTIONS",
+    "type": "medical",
+    "summary": "Assess severity: mild (localized) to severe (anaphylaxis). For anaphylaxis: epinephrine IM, airway management, IV fluids. Monitor for biphasic reaction. Consider antihistamines and steroids for all reactions.",
+    "keywords": ["allergy", "anaphylaxis", "epinephrine", "histamine", "airway"],
+    "procedureImages": ["09"]
+  },
+  {
+    "title": "CARDIAC ARREST",
+    "type": "medical",
+    "summary": "Immediate CPR initiation. Early defibrillation for VF/VT. Follow current AHA guidelines for compression-ventilation ratio. Establish IV/IO access. Consider reversible causes (H's & T's). Monitor ETCO2 for CPR quality.",
+    "keywords": ["arrest", "CPR", "defibrillation", "ACLS", "resuscitation"],
+    "procedureImages": ["13", "14"]
+  },
+  {
+    "title": "CHEST PAIN – STEMI",
+    "type": "medical",
+    "summary": "Rapid 12-lead ECG within 10 minutes. Aspirin administration. Nitroglycerin if BP allows. Establish IV access. Early notification to receiving facility for STEMI activation. Monitor vital signs and rhythm.",
+    "keywords": ["chest pain", "STEMI", "cardiac", "ECG", "nitroglycerin"],
+    "procedureImages": ["15"]
+  },
+  {
+    "title": "RESPIRATORY EMERGENCIES",
+    "type": "medical",
+    "summary": "Assess work of breathing, lung sounds, SpO2. Position of comfort. Supplemental oxygen as needed. Consider CPAP for severe distress. Bronchodilators for bronchospasm. Monitor for deterioration.",
+    "keywords": ["breathing", "respiratory", "oxygen", "CPAP", "asthma", "COPD"],
+    "procedureImages": ["33", "34", "35"]
+  },
+  {
+    "title": "SEIZURES",
+    "type": "medical",
+    "summary": "Protect from injury during seizure. Time seizure duration. Check blood glucose. Benzodiazepines for status epilepticus. Maintain airway. Consider underlying causes. Monitor post-ictal phase.",
+    "keywords": ["seizure", "epilepsy", "status", "benzodiazepine", "neurological"],
+    "procedureImages": ["36"]
+  },
+  {
+    "title": "STROKE",
+    "type": "medical",
+    "summary": "Rapid stroke assessment using BE-FAST scale. Document last known well time. Blood glucose check. Notify receiving facility early. Maintain head elevation 30°. Monitor airway and vital signs.",
+    "keywords": ["stroke", "CVA", "BE-FAST", "neurological", "thrombolysis"],
+    "procedureImages": ["38"]
+  },
+  {
+    "title": "TRAUMA",
+    "type": "trauma",
+    "summary": "Scene safety assessment. Primary survey (ABCDE). Control major hemorrhage. Spinal motion restriction if indicated. Rapid transport decision. Secondary survey en route. Monitor vital signs frequently.",
+    "keywords": ["injury", "bleeding", "fracture", "assessment", "transport"],
+    "procedureImages": ["47", "48", "49", "50", "51", "52", "53", "54", "55", "56"]
+  },
+  {
+    "title": "BURNS",
+    "type": "trauma",
+    "summary": "Stop burning process. Calculate TBSA using Rule of 9s. Cool thermal burns. Dry chemical burns before irrigation. Early IV fluids for significant burns. Pain management. Prevent hypothermia.",
+    "keywords": ["burn", "thermal", "chemical", "fluid", "TBSA"],
+    "procedureImages": ["48"]
+  },
+  {
+    "title": "HEAD AND SPINAL INJURIES",
+    "type": "trauma",
+    "summary": "Maintain manual stabilization. Assess neurological status. Monitor GCS trends. Control bleeding. Manage airway while maintaining alignment. Early transport for deteriorating patients.",
+    "keywords": ["head", "spine", "neurological", "trauma", "GCS"],
+    "procedureImages": ["52", "53"]
+  },
+  {
+    "title": "ENVIRONMENTAL EMERGENCIES",
+    "type": "medical",
+    "summary": "Remove from exposure. Core temperature assessment. Active rewarming for hypothermia. Cooling measures for hyperthermia. Monitor cardiac rhythm. Treat associated injuries/conditions.",
+    "keywords": ["hypothermia", "hyperthermia", "exposure", "temperature", "environmental"],
+    "procedureImages": ["19", "20"]
+  }
+]
